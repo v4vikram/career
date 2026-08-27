@@ -25,7 +25,7 @@ nahi, wo 10 patterns jo screening aur first round mein baar-baar aate hain.
 
 | File | Kis liye | Done |
 |------|----------|:----:|
-| [Basics — Array & String](basics-array-string.md) | 29 "normal" questions jo service companies mein sabse zyada aate hain. **Patterns se pehle** — 2-3 din, roz ~1 ghanta | [ ] |
+| [Basics — Array & String](basics-array-string.md) | 29 "normal" questions jo service companies mein sabse zyada aate hain — list + gotchas. Code [practice/](practice/) mein likho. **Patterns se pehle** — 2-3 din | [ ] |
 
 ---
 

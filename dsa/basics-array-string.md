@@ -13,6 +13,22 @@
 
 ---
 
+## Kahan likho — practice files
+
+Browser mat kholo. Terminal se chalao:
+
+```bash
+node dsa/practice/01-array-basics.js     # 12 array
+node dsa/practice/02-string-basics.js    # 10 string
+node dsa/practice/03-js-basics.js        # 7 JS
+```
+
+Har question apne function mein hai — **purana comment karne ki zaroorat nahi.**
+Function bharo, file chalao, `✅` ya `❌` turant dikh jayega. Galat hone pe
+"mila" vs "chahiye" bhi dikhta hai, to aankh se check nahi karna padega.
+
+---
+
 ## Array basics (12)
 
 | # | Question | Approach | Time / Space | Done |
