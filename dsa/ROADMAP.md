@@ -10,6 +10,17 @@ Problems LeetCode ke hain. Naam se search kar lena.
 
 ---
 
+## Day 0 — Basics (sprint se pehle)
+
+Sprint shuru karne se pehle [Basics — Array & String](basics-array-string.md)
+nipata do — 29 questions, **2-3 din, roz ~1 ghanta**.
+
+Ye wo "normal" array/string questions hain jo service companies mein LeetCode
+mediums se zyada poochhe jaate hain. Inke baad neeche wale patterns aasan lagenge,
+kyunki 6-7 ka logic wahi hai (two pointers, frequency map).
+
+---
+
 ## Week 1 — Foundation
 
 | Day | Kya karna hai | 30-min fallback |

@@ -21,6 +21,14 @@ nahi, wo 10 patterns jo screening aur first round mein baar-baar aate hain.
 
 ---
 
+## Shuru yahan se — Basics
+
+| File | Kis liye | Done |
+|------|----------|:----:|
+| [Basics — Array & String](basics-array-string.md) | 29 "normal" questions jo service companies mein sabse zyada aate hain. **Patterns se pehle** — 2-3 din, roz ~1 ghanta | [ ] |
+
+---
+
 ## The 10 patterns
 
 Order deliberate hai — har pattern pichle pe build karta hai.
