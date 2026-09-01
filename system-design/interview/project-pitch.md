@@ -23,26 +23,73 @@ three shallowly.
 Fill each line, then say the whole thing out loud until it's smooth.
 
 **1. What it is + who uses it** (1 sentence)
-> _______________________________________________
+> TimeWatch India's company website and internal admin dashboard — a B2B security &
+> workforce-management company (biometric attendance, access control, X-ray baggage
+> scanners). The public site serves prospective clients; the dashboard is used internally
+> to manage the product catalog and blog content.
 
 **2. The stack, with one reason** (1 sentence)
-> "React on the front end, Node and Express for the API, MySQL for _______ because
-> _______, and Redis for _______."
+> "Next.js on the front end — with shadcn/ui for components and Zustand for state — Node
+> and Express for the API, and MongoDB with Mongoose for the product catalog, because specs
+> vary a lot across categories (an attendance terminal and an X-ray scanner have almost no
+> fields in common), so a flexible document schema fit better than rigid relational tables."
 
 **3. Scale or usage — any real number you have**
 > "About ____ users / ____ products / ____ requests a day."
 > *(No real users? Say so honestly and give the load you tested with. Never invent numbers —
 > the follow-up questions will expose it instantly.)*
+>
+> **TODO before rehearsing:** check GA4 (if set up) or the nginx access log / `pm2 monit`
+> for a real number. If nothing's tracked, the honest line is: *"No analytics dashboard set
+> up yet, but it's serving real production client traffic, not a demo."* That's a fine
+> answer — better than a guessed number that falls apart under a follow-up.
 
 **4. The one interesting technical problem** (this is the whole answer — 3–4 sentences)
-> Problem: _______________________________________________
-> What I tried first: _______________________________________________
-> Why it didn't work: _______________________________________________
-> What I did instead: _______________________________________________
-> Result (with a number if you have one): _______________________________________________
+> Problem: Deploys used to overwrite the live app directly — if a bad deploy went out,
+> that meant downtime while I manually SSH'd in, diagnosed it, and fixed it live.
+> What I tried first: Manually redeploying over SSH whenever something broke.
+> Why it didn't work: Slow and risky — there was no fast way to revert if the new code had
+> an issue in production, and every deploy risked an outage.
+> What I did instead: Built a CI/CD pipeline (GitHub Actions → VPS) that ships each deploy
+> into its own timestamped release folder, links in the shared `.env` and persistent
+> `public/` uploads, installs deps and runs a health-check boot *before* touching anything
+> live, then does an atomic symlink swap to make it current and reloads PM2 (`pm2 reload`,
+> not `restart`, for zero downtime). It keeps the last 5 releases on disk.
+> Result: A bad deploy is now a symlink flip back to the previous release instead of
+> emergency SSH firefighting — rollback takes seconds, and it hasn't caused live downtime
+> since.
 
 **5. What you'd do differently now** (1 sentence — shows growth, and they always ask)
-> _______________________________________________
+> Uploaded files (product datasheets, images) currently live on the VPS disk via Multer —
+> I'd move that to S3/Cloudinary so the app servers stay stateless and easier to scale
+> horizontally later.
+
+---
+
+## Second story, ready if they ask "why Next.js?" or "any other technical challenge?"
+
+This is a separate, real story from the same project — keep it in your pocket for a second
+technical question so you're not repeating the deploy-pipeline one twice.
+
+> **Problem:** The site was originally a client-side-rendered React app. Search engines
+> struggled to index it properly and page-speed scores were poor — for a B2B company that
+> depends on organic search for its product/solution pages, that directly hurt lead
+> generation, not just a vanity metric.
+>
+> **What I did:** Rebuilt it in Next.js using SSG for the product and solution pages —
+> since that content doesn't change per-request, pre-rendering means crawlers get full HTML
+> immediately instead of waiting on client-side JS to hydrate. Alongside that I redesigned
+> it to match the brand tightly — logo, fonts, theme, layout — kept it clean and simple
+> rather than generic-template-looking, and built the admin panel so product/blog content
+> can be updated without a code deploy. Also set up basic AEO/GEO so the content is
+> structured to be citable by AI answer engines, not just ranked by traditional search.
+>
+> **Result (Lighthouse, production):** 96 Performance, 100 Best Practices, 92 SEO, 87
+> Accessibility. The site is now ranking on its target keywords.
+>
+> **Honest "what's next" (reuse this if asked "what would you improve"):** Accessibility
+> at 87 is the one score still short of the others — that's a concrete, specific next step
+> (alt text coverage, contrast, focus states) rather than a vague "nothing."
 
 ---
 
@@ -84,26 +131,51 @@ ever sounding like it's reciting them. **This is the target.**
 **1. "Why did you choose MySQL over MongoDB?" (or vice versa)**
 Never answer "because I know it." Give the data-model reason — see
 [topics/09](../topics/09-sql-vs-nosql.md).
-> Your answer: _______________________________________________
+> Your answer: Product specs are wildly different per category — an attendance device has
+> fields like sensor type and recognition method, an X-ray scanner has tunnel size and
+> throughput. Forcing that into fixed relational columns meant either a huge sparse table
+> or a maze of category-specific joins. MongoDB let each product document carry only the
+> fields relevant to its category, and Mongoose schemas still gave me validation on top.
 
 **2. "How does authentication work in your project?"**
 Walk the flow: login → token issued → where it's stored → how it's verified → how logout
 works. [topics/06](../topics/06-auth-and-security.md).
-> Your answer: _______________________________________________
+> Your answer: Login checks the password with bcrypt, and on success the backend signs a
+> JWT. The dashboard stores it in localStorage; an axios interceptor attaches it as
+> `Authorization: Bearer <token>` on every request. A `protect` middleware on the backend
+> verifies it with `jwt.verify` before any protected route runs; a 401 clears the stored
+> token client-side and redirects to login. A few extra-sensitive internal routes also
+> layer on an API-key check and a server IP allowlist on top of the JWT check.
+> *(Known trade-off worth naming if pushed: localStorage is readable by any injected script,
+> so it's vulnerable to XSS in a way an httpOnly cookie wouldn't be — an honest "what I'd
+> harden next" if asked.)*
 
 **3. "What happens if your traffic goes 10x tomorrow?"**
 The ordered list from [topics/08](../topics/08-scaling-basics.md) — measure, optimise, cache,
 scale up, scale out. Then name the specific thing in *your* project that breaks first.
-> Your answer: _______________________________________________
+> Your answer: The app tier is already stateless (JWT, no server-side sessions) and runs
+> under PM2, so it could scale horizontally behind nginx without much rework. The first
+> real bottleneck would be the single MongoDB instance — I'd add caching on the read-heavy
+> product-listing endpoints first, then look at a MongoDB replica for reads before touching
+> the app tier at all.
 
 **4. "What was the hardest bug you hit?"**
 Have one ready, told the same way: symptom → what you suspected → how you found the real
 cause → fix. The debugging *method* is what's being graded.
-> Your answer: _______________________________________________
+> Your answer: Symptom: the same product category was showing up twice, as two separate
+> groups, in the catalog navigation. I first suspected duplicate category documents in the
+> DB. Tracing the aggregation pipeline showed the real cause: it grouped products by the
+> *stored* `categorySlug`/`subCategorySlug` fields, and one older document had a stale slug
+> left over from before a rename — same `categoryName`, different `categorySlug`, so
+> Mongo's `$group` split it into a second group. Fix: stopped trusting stored slug fields as
+> the grouping key entirely — group by `categoryName` only, then derive both slugs fresh
+> with `slugify()` after grouping, so a stale field can never fork a category again.
 
 **5. "What would you do differently?"**
 Never "nothing." Pick one real thing and explain the trade-off you'd now make differently.
-> Your answer: _______________________________________________
+> Your answer: Move uploaded files off the VPS disk and onto S3/Cloudinary — right now an
+> app server restart or a disk issue puts uploads at risk, and it also blocks easily running
+> more than one app instance behind a load balancer.
 
 ---
 

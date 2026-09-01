@@ -4,7 +4,7 @@ function reverseWords(words){
   // vapis  string mai convert & space remove kiya
   let arr = words.split(" ");
   let i=0;
-  let j= words.length;
+  let j= words.length-1;
 
   while(i<j){
     [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -13,7 +13,6 @@ function reverseWords(words){
   }
   
   return arr.join(" ").trim().replace(/\s+/g, " ")
-  // console.log(arr)
 }
 // console.log(reverseWords("the sky   is blue"))
 
@@ -35,9 +34,9 @@ function firstUniqChar(s){
   }
   return -1
 }
-console.log(firstUniqChar("1leetcode"))
+// console.log(firstUniqChar("1leetcode"))
 
-function removeDuplicateLetter(str){
+function removeRepeatedChars (str){
   // check kiya seen mai ya nahi
   // nahi hai toh uski value true krdi
   // res mai add kr diya
@@ -52,5 +51,24 @@ function removeDuplicateLetter(str){
   }
   return res
 }
-// console.log(removeDuplicateLetter("aabccdd"))
+// console.log(removeRepeatedChars("aabccdd"))
+
+function countVowelsAndConst(word){
+  let v = 0, c = 0;
+  const vowels = ["a","e","i","o","u"];
+  
+  for (const ch of word.toLowerCase()){
+    if (ch >= "a" && ch <= "z"){     
+      if (vowels.includes(ch)) {
+        v++;
+      } else {
+        c++;
+      }
+    }
+  }
+  return [v, c];
+}
+
+
+// console.log(countVowelsAndConst("hIo how are   yOu"))
 
