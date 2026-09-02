@@ -161,27 +161,42 @@ function mergeTwoSorted(arr1, arr2) {
 // }
 // console.log(sqaureSortedArray([-4, -1, 0, 3, 10]))
 
-function twoSum(arr, target) {
-    let j = arr.length - 1;
-    let i = 0;
-    let sum = 0;
-    while (i < j) {
-        sum = arr[i] + arr[j];
-        if (sum == target) {
-            return [arr[i], arr[j]]
-        }
-        else if (sum > target) {
-            j--
-        }
-        else if (sum < target) {
-            i++
-        }
+// function twoSum(arr, target) {
+//     let j = arr.length - 1;
+//     let i = 0;
+//     let sum = 0;
+//     while (i < j) {
+//         sum = arr[i] + arr[j];
+//         if (sum == target) {
+//             return [arr[i], arr[j]]
+//         }
+//         else if (sum > target) {
+//             j--
+//         }
+//         else if (sum < target) {
+//             i++
+//         }
 
 
-    }
-    return -1
+//     }
+//     return -1
+// }
+
+function twoSum(nums, target) {
+  const seen = new Map();    
+
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+                // 21 - 2 = 19  
+   
+    if (seen.has(need)) return [seen.get(need), i];
+    seen.set(nums[i], i);             
+  }
+ 
+  return [];
 }
-// console.log(twoSum([2, 3, 5, 7, 8, 9], 21))
+
+console.log(twoSum([2, 3, 5, 7, 8, 9], 21))
 
 function moveZeros(arr) {
     let pos = 0;

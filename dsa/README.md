@@ -9,6 +9,9 @@ nahi, wo 10 patterns jo screening aur first round mein baar-baar aate hain.
 
 ---
 
+> **Naya chat shuru kar rahe ho?** [CONTEXT.md](CONTEXT.md) ka content paste kar do —
+> Claude ko turant pata chal jayega kahan tak pahunche ho aur aage kya karna hai.
+
 ## Kaise use karna hai
 
 1. **[ROADMAP.md](ROADMAP.md)** kholo — wo batayega aaj kya karna hai. Khud decide mat karo.

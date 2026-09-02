@@ -10,6 +10,9 @@ memorise FAANG-scale distributed systems theory.
 
 ---
 
+> **Starting a new chat?** Paste the content of [CONTEXT.md](CONTEXT.md) — it tells Claude
+> where I am, what is tested, and what is next.
+
 ## How I use this repo
 
 1. Open **[ROADMAP.md](ROADMAP.md)** — it tells me what to study today. I never decide.
